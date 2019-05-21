@@ -39,7 +39,7 @@ def scanMotion(width, height):
     return motionFound
 
 def motionDetection():
-    print("Scanning for Motion threshold=%i sensitivity=%i...  % (threshold, sensitivity)")
+    print("Scanning for Motion threshold=%i sensitivity=%i..."  % (threshold, sensitivity))
     while True:
         if scanMotion(224, 160):
             print ("Motion detected")
