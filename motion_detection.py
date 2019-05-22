@@ -3,6 +3,10 @@
 import picamera
 import picamera.array
 import time
+import paho.mqtt.publish as publish
+ 
+MQTT_SERVER = "192.168.43.136"
+MQTT_PATH = "SmartFlowerpot"
 
 threshold = 10    # How Much pixel changes
 sensitivity = 100 # How many pixels change
@@ -43,6 +47,7 @@ def motionDetection():
     while True:
         if scanMotion(224, 160):
             print ("Motion detected")
+            publish.single(MQTT_PATH, "motion detected", hostname=MQTT_SERVER)
 
 if __name__ == '__main__':
     try:
