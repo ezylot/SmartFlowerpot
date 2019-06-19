@@ -4,12 +4,17 @@ import picamera
 import picamera.array
 import time
 import paho.mqtt.publish as publish
+from sense_hat import SenseHat
+
  
 MQTT_SERVER = "192.168.43.136"
 MQTT_PATH = "SmartFlowerpot"
 
 threshold = 10    # How Much pixel changes
 sensitivity = 100 # How many pixels change
+
+sense = SenseHat()
+sense.clear()
 
 def takeMotionImage(width, height):
     with picamera.PiCamera() as camera:
@@ -45,9 +50,16 @@ def scanMotion(width, height):
 def motionDetection():
     print("Scanning for Motion threshold=%i sensitivity=%i..."  % (threshold, sensitivity))
     while True:
-        if scanMotion(224, 160):
-            print ("Motion detected")
-            publish.single(MQTT_PATH, "motion detected", hostname=MQTT_SERVER)
+        try:
+          if scanMotion(224, 160):
+              temp = sense.get_temperature()
+              print ("Motion detected --> Temperatur is: " + str(temp))
+              try:
+                publish.single(MQTT_PATH, str(temp), hostname=MQTT_SERVER)
+              except:
+                print("server unreachable")
+        except:
+          print("something went wrong")
 
 if __name__ == '__main__':
     try:
