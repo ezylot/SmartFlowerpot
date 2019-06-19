@@ -29,7 +29,7 @@ def on_message(client, userdata, msg):
     global lastchange
     global dif
     lastchange = time()
-    if float(msg.payload) > 26:
+    if float(msg.payload) > 24:
         dif = 2
     else:
         dif = 6
